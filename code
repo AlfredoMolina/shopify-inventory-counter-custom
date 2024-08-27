@@ -1,0 +1,71 @@
+ <div id="variant-inventory">
+  {%- for variant in product.variants -%}
+    <div class="variant-inventory-info" id="inventory-variant-{{ variant.id }}" {% unless forloop.first %}style="display:none;"{% endunless %}>
+      {%- if variant.inventory_management == "shopify" -%}
+        {%- if variant.inventory_quantity > 0 -%}
+          <span style="display: inline-block; width: 10px; height: 10px; 
+            background-color: 
+            {% if variant.inventory_quantity < 10 %} 
+              red
+            {% else %}
+              green
+            {% endif %}; 
+            border-radius: 50%; margin-right: 5px;">
+          </span>
+          {% if variant.inventory_quantity < 10 %}
+            Low stock - {{ variant.inventory_quantity }} items left
+          {% else %}
+            In stock - {{ variant.inventory_quantity }} items available 
+          {% endif %}
+        {%- else -%}
+          The product is out of stock.
+        {%- endif -%}
+      {%- else -%}
+        This product is available.
+      {%- endif -%}
+    </div>
+  {%- endfor -%}
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var variantSelect = document.querySelector('[name="id"]');
+
+    if (variantSelect) {
+      variantSelect.addEventListener('change', function(event) {
+        var selectedVariantId = event.target.value;
+
+        // Hide all variant inventory info
+        var inventoryInfoElements = document.querySelectorAll('.variant-inventory-info');
+        inventoryInfoElements.forEach(function(element) {
+          element.style.display = 'none';
+        });
+
+        // Show the selected variant's inventory info
+        var selectedInventoryInfo = document.getElementById('inventory-variant-' + selectedVariantId);
+        if (selectedInventoryInfo) {
+          selectedInventoryInfo.style.display = 'block';
+        }
+      });
+
+      // Trigger the change event on page load to display the correct inventory info for the default selected variant
+      variantSelect.dispatchEvent(new Event('change'));
+    }
+  });
+</script>
+<div class="trust-badges">
+  <div class="space-x-3">
+    <span class="badge">
+      <img src="https://cdn.shopify.com/s/files/1/0663/3791/files/icoons.png?v=1721775870" alt="free 2 day shipping badge" width="30px">
+      <span class="badge-text">Free 2 Day Shipping over $59.00 (US)</span>
+    </span>
+    <span class="badge">
+      <img src="https://cdn.shopify.com/s/files/1/0663/3791/files/customer-service-icon.png?v=1721776557" alt="fast, reliable customer service badge" width="30px">
+      <span class="badge-text"> Fast & Reliable Customer Serivce </span>
+    </span>
+    <span class="badge">
+      <img src="https://cdn.shopify.com/s/files/1/0663/3791/files/icon.png?v=1721775536" alt="secure checkout badge" width="30px">
+      <span class="badge-text">Secure Checkout 100% Guaranteed</span>
+    </span>
+  </div>
+</div>
